@@ -8,6 +8,6 @@ class ProductCardAppliences(
 ) : ProductCard(naming, brand, price) {
     override fun printInfo() {
         super.printInfo()
-        println("Power: $power")
+        println("  Power: $power")
     }
 }
