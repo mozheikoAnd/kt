@@ -25,8 +25,22 @@ class Accountant(
                 Operation.EXIT -> break
                 Operation.ADD_CARD -> addCard()
                 Operation.SHOW_ALL_CARDS -> showAllItems()
+                Operation.DELETE_CARD -> deleteCard()
             }
         }
+    }
+    fun deleteCard(){
+        print("Enter name of card which you want to delete: ")
+        val nameCard = readln()
+        val fileBegin = file.readText().trim()
+        val fileSplit = fileBegin.split("\n")
+        val fileEnd = fileBegin.toMutableList()
+        for ((index, line) in fileSplit.withIndex()) {
+            if (line.contains(nameCard)) {
+                fileEnd.removeAt(index)
+            }
+        }
+        file.writeText(fileEnd)
     }
 
     fun addCard() {
@@ -92,6 +106,8 @@ class Accountant(
                 }
             }
             items.add(productCard)
+            items.withIndex()
+            items.removeAt()
         }
         for (item in items) {
             item.printInfo()
