@@ -38,31 +38,17 @@ class Accountant(
     fun deleteCard() {
         print("Enter name of card which you want to delete: ")
         val nameCard = readln()
-//        val fileBegin = file.readText().trim()
-//        val fileSplit = fileBegin.split("\n")
-//        file.writeText("")
-//        for (line in fileSplit) {
-//            if (!(line.contains(nameCard))) {
-//                file.appendText("$line\n")
-//            }
-//        }
         val cards = loadAllCards()
-        for (card in cards) {
-            if (card.naming == nameCard) {
-                cards.remove(card)
-                break
-            }
-        }
         file.writeText("")
         for (card in cards) {
-            saveProductCardToFile(card)
+            if (card.naming != nameCard) {
+                saveProductCardToFile(card)
+            }
         }
     }
 
     fun saveProductCardToFile(card: ProductCard) {
-        file.appendText("${card.naming}%")
-        file.appendText("${card.brand}%")
-        file.appendText("${card.price}%")
+        file.appendText("${card.naming}%${card.brand}%${card.price}%")
         when (card) {
             is ProductCardFood -> {
                 file.appendText("${card.kCalories}%${WhichProductCard.FOOD}\n")
@@ -126,64 +112,35 @@ class Accountant(
         val whichProductIndex = readln().toInt()
         val whichCard = whichProducts[whichProductIndex]
         print("Enter name: ")
-        file.appendText("${readln()}%")
+        val name = readln()
         print("Enter brand: ")
-        file.appendText("${readln()}%")
+        val brand = readln()
         print("Enter price: ")
-        file.appendText("${readln()}%")
+        val price = readln().toInt()
 
-        when (whichCard) {
+        val card = when (whichCard) {
             WhichProductCard.SHOES -> {
                 print("Enter size: ")
-                file.appendText("${readln()}%")
+                val size = readln().toInt()
+                ProductCardShoes(size, name, brand, price)
             }
 
             WhichProductCard.APPLIANCE -> {
                 print("Enter power: ")
-                file.appendText("${readln()}%")
+                val power = readln().toInt()
+                ProductCardAppliences(power, name, brand, price)
             }
 
             WhichProductCard.FOOD -> {
                 print("Enter calories: ")
-                file.appendText("${readln()}%")
+                val calories = readln().toInt()
+                ProductCardFood(calories, name, brand, price)
             }
         }
-        file.appendText("${whichCard}\n")
+        saveProductCardToFile(card)
     }
 
     fun showAllItems() {
-        if (file.readText().isEmpty()) {
-            return
-        }
-//        val cards = file.readText().trim().split("\n")
-//        items.clear()
-//        for (card in cards) {
-//            val propertyCard = card.split("%")
-//            val name = propertyCard[0]
-//            val brand = propertyCard[1]
-//            val price = propertyCard[2].toInt()
-//            val cardType = propertyCard[propertyCard.lastIndex]
-//            val productCard = when (WhichProductCard.valueOf(cardType)) {
-//                WhichProductCard.SHOES -> {
-//                    val size = propertyCard[3].toInt()
-//                    ProductCardShoes(size, name, brand, price)
-//
-//                }
-//
-//                WhichProductCard.APPLIANCE -> {
-//                    val power = propertyCard[3].toInt()
-//                    ProductCardAppliences(power, name, brand, price)
-//
-//                }
-//
-//                WhichProductCard.FOOD -> {
-//                    val calories = propertyCard[3].toInt()
-//                    ProductCardFood(calories, name, brand, price)
-//
-//                }
-//            }
-//            items.add(productCard)
-//        }
         val cards = loadAllCards()
         for (card in cards) {
             card.printInfo()
