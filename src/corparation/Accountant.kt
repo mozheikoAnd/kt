@@ -8,18 +8,23 @@ class Accountant(
 ) : Employee(name, age) {
 
     val file = File("product_card.txt")
-    val items = mutableListOf<ProductCard>()
 
     override fun working() {
         while (true) {
             val operations = Operation.entries
-            print("Enter your operation. ")
-            for ((index, oper) in operations.withIndex()) {
-                print("$index - $oper")
-                if (index != operations.lastIndex) print(", ")
-                else print(": ")
+            var operationIndex: Int
+            while (true) {
+                print("Enter your operation. ")
+                for ((index, oper) in operations.withIndex()) {
+                    print("$index - $oper")
+                    if (index != operations.lastIndex) print(", ")
+                    else print(": ")
+                }
+                operationIndex = readln().toInt()
+                if (operationIndex in 0..operations.lastIndex) {
+                    break
+                } else println("Wrong operation. Try again.")
             }
-            val operationIndex = readln().toInt()
             val operation = operations[operationIndex]
             when (operation) {
                 Operation.EXIT -> break
@@ -29,18 +34,85 @@ class Accountant(
             }
         }
     }
-    fun deleteCard(){
+
+    fun deleteCard() {
         print("Enter name of card which you want to delete: ")
         val nameCard = readln()
-        val fileBegin = file.readText().trim()
-        val fileSplit = fileBegin.split("\n")
-        val fileEnd = fileBegin.toMutableList()
-        for ((index, line) in fileSplit.withIndex()) {
-            if (line.contains(nameCard)) {
-                fileEnd.removeAt(index)
+//        val fileBegin = file.readText().trim()
+//        val fileSplit = fileBegin.split("\n")
+//        file.writeText("")
+//        for (line in fileSplit) {
+//            if (!(line.contains(nameCard))) {
+//                file.appendText("$line\n")
+//            }
+//        }
+        val cards = loadAllCards()
+        for (card in cards) {
+            if (card.naming == nameCard) {
+                cards.remove(card)
+                break
             }
         }
-        file.writeText(fileEnd)
+        file.writeText("")
+        for (card in cards) {
+            saveProductCardToFile(card)
+        }
+    }
+
+    fun saveProductCardToFile(card: ProductCard) {
+        file.appendText("${card.naming}%")
+        file.appendText("${card.brand}%")
+        file.appendText("${card.price}%")
+        when (card) {
+            is ProductCardFood -> {
+                file.appendText("${card.kCalories}%${WhichProductCard.FOOD}\n")
+            }
+
+            is ProductCardShoes -> {
+                file.appendText("${card.size}%${WhichProductCard.SHOES}\n")
+            }
+
+            is ProductCardAppliences -> {
+                file.appendText("${card.power}%${WhichProductCard.APPLIANCE}\n")
+            }
+        }
+    }
+
+    fun loadAllCards(): MutableList<ProductCard> {
+        val allCards = mutableListOf<ProductCard>()
+        if (file.readText().isEmpty()) {
+            return allCards
+        }
+
+        val cards = file.readText().trim().split("\n")
+        for (card in cards) {
+            val propertyCard = card.split("%")
+            val name = propertyCard[0]
+            val brand = propertyCard[1]
+            val price = propertyCard[2].toInt()
+            val cardType = propertyCard[propertyCard.lastIndex]
+            val productCard = when (WhichProductCard.valueOf(cardType)) {
+                WhichProductCard.SHOES -> {
+                    val size = propertyCard[3].toInt()
+                    ProductCardShoes(size, name, brand, price)
+
+                }
+
+                WhichProductCard.APPLIANCE -> {
+                    val power = propertyCard[3].toInt()
+                    ProductCardAppliences(power, name, brand, price)
+
+                }
+
+                WhichProductCard.FOOD -> {
+                    val calories = propertyCard[3].toInt()
+                    ProductCardFood(calories, name, brand, price)
+
+                }
+            }
+            allCards.add(productCard)
+        }
+        return allCards
     }
 
     fun addCard() {
@@ -80,37 +152,41 @@ class Accountant(
     }
 
     fun showAllItems() {
-        val cards = file.readText().trim().split("\n")
-        items.clear()
-        for (card in cards) {
-            val propertyCard = card.split("%")
-            val name = propertyCard[0]
-            val brand = propertyCard[1]
-            val price = propertyCard[2].toInt()
-            val cardType = propertyCard[propertyCard.lastIndex]
-            val productCard = when (WhichProductCard.valueOf(cardType)){
-                WhichProductCard.SHOES -> {
-                    val size = propertyCard[3].toInt()
-                    ProductCardShoes(size,name,brand,price)
-
-                }
-                WhichProductCard.APPLIANCE -> {
-                    val power = propertyCard[3].toInt()
-                    ProductCardAppliences(power,name,brand,price)
-
-                }
-                WhichProductCard.FOOD -> {
-                    val calories = propertyCard[3].toInt()
-                    ProductCardFood(calories,name,brand,price)
-
-                }
-            }
-            items.add(productCard)
-            items.withIndex()
-            items.removeAt()
+        if (file.readText().isEmpty()) {
+            return
         }
-        for (item in items) {
-            item.printInfo()
+//        val cards = file.readText().trim().split("\n")
+//        items.clear()
+//        for (card in cards) {
+//            val propertyCard = card.split("%")
+//            val name = propertyCard[0]
+//            val brand = propertyCard[1]
+//            val price = propertyCard[2].toInt()
+//            val cardType = propertyCard[propertyCard.lastIndex]
+//            val productCard = when (WhichProductCard.valueOf(cardType)) {
+//                WhichProductCard.SHOES -> {
+//                    val size = propertyCard[3].toInt()
+//                    ProductCardShoes(size, name, brand, price)
+//
+//                }
+//
+//                WhichProductCard.APPLIANCE -> {
+//                    val power = propertyCard[3].toInt()
+//                    ProductCardAppliences(power, name, brand, price)
+//
+//                }
+//
+//                WhichProductCard.FOOD -> {
+//                    val calories = propertyCard[3].toInt()
+//                    ProductCardFood(calories, name, brand, price)
+//
+//                }
+//            }
+//            items.add(productCard)
+//        }
+        val cards = loadAllCards()
+        for (card in cards) {
+            card.printInfo()
         }
     }
 }

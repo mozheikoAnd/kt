@@ -8,7 +8,7 @@ fun main() {
     val accountant = Accountant("Irina", 29)
 
     val workers = listOf<Employee>(director, assistant, consultant, employee, accountant)
-    for(worker in workers) {
+    for (worker in workers) {
         worker.working()
     }
 }
