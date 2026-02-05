@@ -14,11 +14,10 @@ class Accountant(
             val operations = Operation.entries
             var operationIndex: Int
             while (true) {
-                print("Enter your operation. ")
+                println("Enter your operation. ")
                 for ((index, oper) in operations.withIndex()) {
-                    print("$index - $oper")
-                    if (index != operations.lastIndex) print(", ")
-                    else print(": ")
+                    println("$index - ${oper.title}")
+
                 }
                 operationIndex = readln().toInt()
                 if (operationIndex in 0..operations.lastIndex) {
@@ -31,9 +30,13 @@ class Accountant(
                 Operation.ADD_CARD -> addCard()
                 Operation.SHOW_ALL_CARDS -> showAllItems()
                 Operation.DELETE_CARD -> deleteCard()
+                Operation.REGISTER_EMPLOYEE -> {}
+                Operation.FIRE_EMPLOYEE -> {}
+                Operation.SHOW_ALL_EMPLOYEE -> {}
             }
         }
     }
+
 
     fun deleteCard() {
         print("Enter name of card which you want to delete: ")
@@ -146,4 +149,29 @@ class Accountant(
             card.printInfo()
         }
     }
+
+    fun registerEmployee() {
+        // выбрать позицию (добавить Enum)
+        val positionsJob = PositionJob.entries
+        print("Choose position: ")
+        for ((index, position) in positionsJob.withIndex()) {
+            print("$index - ${position.title}")
+            if (index != positionsJob.lastIndex) print(", ")
+            else print(": ")
+        }
+        val positionJobIndex = readln().toInt()
+        val positionJob = positionsJob[positionJobIndex]
+
+        // Запросить данные: id: $id, name: $name, age: $age, Position: $position
+        print("Enter id: ")
+        val id = readln().toInt()
+        print("Enter name: ")
+        val name = readln()
+        print("Enter age: ")
+        val age = readln().toInt()
+//        when(positionsJob)
+//
+        }
+
+
 }
