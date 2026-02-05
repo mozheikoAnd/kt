@@ -154,6 +154,7 @@ class Accountant(
         // выбрать позицию (добавить Enum)
         val positionsJob = PositionJob.entries
         print("Choose position: ")
+        //надо вынести в отд функцию
         for ((index, position) in positionsJob.withIndex()) {
             print("$index - ${position.title}")
             if (index != positionsJob.lastIndex) print(", ")
