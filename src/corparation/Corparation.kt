@@ -12,6 +12,6 @@ fun main() {
 //        worker.working()
 //    }
 
-    val accountant = Accountant("Irina", 29)
+    val accountant = Accountant("Irina", 29, 1)
     accountant.working()
 }

@@ -4,10 +4,17 @@ import java.io.File
 
 class Accountant(
     name: String,
-    age: Int
-) : Employee(name, age) {
+    age: Int,
+    id: Int
+) : Employee(name, age, id) {
 
     val file = File("product_card.txt")
+    val fileEmployee = File("workers.txt")
+
+    override fun getInfo() {
+        super.getInfo()
+        println("Position: ${PositionJob.ACCOUNTANT.title}")
+    }
 
     override fun working() {
         while (true) {
@@ -30,9 +37,9 @@ class Accountant(
                 Operation.ADD_CARD -> addCard()
                 Operation.SHOW_ALL_CARDS -> showAllItems()
                 Operation.DELETE_CARD -> deleteCard()
-                Operation.REGISTER_EMPLOYEE -> {}
-                Operation.FIRE_EMPLOYEE -> {}
-                Operation.SHOW_ALL_EMPLOYEE -> {}
+                Operation.REGISTER_EMPLOYEE -> registerEmployee()
+                Operation.FIRE_EMPLOYEE -> fireEmployee()
+                Operation.SHOW_ALL_EMPLOYEE -> showAllEmployees()
             }
         }
     }
@@ -65,6 +72,20 @@ class Accountant(
                 file.appendText("${card.power}%${WhichProductCard.APPLIANCE}\n")
             }
         }
+    }
+
+    fun saveEmployeeToFile(employee: Employee) {
+//        id: $id, name: $name, age: $age, Position: $position
+        fileEmployee.appendText("${employee.id}%${employee.name}%${employee.age}%")
+        fileEmployee.appendText(
+            when (employee) {
+                is Accountant -> ("${PositionJob.ACCOUNTANT}\n")
+                is Assistant -> ("${PositionJob.ASSISTANT}\n")
+                is Consultant -> ("${PositionJob.CONSULTANT}\n")
+                is Director -> ("${PositionJob.DIRECTOR}\n")
+                else -> ""
+            }
+        )
     }
 
     fun loadAllCards(): MutableList<ProductCard> {
@@ -170,9 +191,66 @@ class Accountant(
         val name = readln()
         print("Enter age: ")
         val age = readln().toInt()
-//        when(positionsJob)
-//
+        val employee = when (positionJob) {
+            PositionJob.DIRECTOR -> {
+                Director(name, age, id)
+            }
+
+            PositionJob.ACCOUNTANT -> {
+                Accountant(name, age, id)
+            }
+
+            PositionJob.ASSISTANT -> {
+                Assistant(name, age, id)
+            }
+
+            PositionJob.CONSULTANT -> {
+                Consultant(name, age, id)
+            }
+        }
+        saveEmployeeToFile(employee)
+    }
+
+    fun getEmployees(): List<Employee> {
+        val employeeAll = mutableListOf<Employee>()
+        if (fileEmployee.readText().isEmpty()) {
+            return employeeAll
         }
 
+        val employeesStr = fileEmployee.readText().trim().split("\n")
+        for ((index, employeeStr) in employeesStr.withIndex()) {
+            val employeeSplit = employeeStr.split("%")
+            val id = employeeSplit[0].toInt()
+            val name = employeeSplit[1]
+            val age = employeeSplit[2].toInt()
+            val position = employeeSplit[3]
+            val employee = when (PositionJob.valueOf(position)) {
+                PositionJob.DIRECTOR -> Director(name, age, id)
+                PositionJob.ACCOUNTANT -> Accountant(name, age, id)
+                PositionJob.ASSISTANT -> Assistant(name, age, id)
+                PositionJob.CONSULTANT -> Consultant(name, age, id)
+            }
+            employeeAll.add(employee)
+        }
+        return employeeAll
+    }
 
+    fun showAllEmployees() {
+        val allEmployees = getEmployees()
+        for (employee in allEmployees) {
+            employee.getInfo()
+        }
+    }
+
+    fun fireEmployee() {
+        print("Enter id employee which you want to fire: ")
+        val id = readln().toInt()
+        val employeeAll = getEmployees()
+        fileEmployee.writeText("")
+        for (employee in employeeAll) {
+            if (employee.id != id) {
+                saveEmployeeToFile(employee)
+            }
+        }
+    }
 }

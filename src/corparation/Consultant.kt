@@ -5,7 +5,8 @@ import kotlin.random.Random
 class Consultant(
     name: String,
     age: Int = 0,
-): Employee(name, age) {
+    id: Int
+) : Employee(name, age, id) {
     fun sayHello() {
         print("Hello! My name is $name.")
         if (age != 0) print(" My age is $age")
@@ -21,5 +22,9 @@ class Consultant(
 
     override fun working() {
         println("Employee $name is serve...")
+    }
+    override fun getInfo() {
+        super.getInfo()
+        println("Position: ${PositionJob.CONSULTANT.title}")
     }
 }

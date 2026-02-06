@@ -1,9 +1,12 @@
 package corparation
 
+import kotlin.Int
+
 class Assistant (
     name: String,
-    age: Int = 0
-): Employee(name, age) {
+    age: Int = 0,
+    id: Int
+) : Employee(name, age, id) {
     fun bingCoffee(count: Int = 1, typeCoffee: String = "Cappuccino"): String {
         repeat(count) {
             println("Stand up")
@@ -18,5 +21,9 @@ class Assistant (
 
     override fun working() {
         println("Employee $name is answer on call..")
+    }
+    override fun getInfo() {
+        super.getInfo()
+        println("Position: ${PositionJob.ASSISTANT.title}")
     }
 }
