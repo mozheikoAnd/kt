@@ -1,12 +1,14 @@
 package corparation
 
-open class ProductCard(
+abstract class ProductCard(
     val naming: String,
     val brand: String,
     val price: Int,
     val productType: WhichProductCard
 ) {
-    open fun printInfo() {
-        print("Product Card: $naming  Brand: $brand  Price: $price Product type: ${productType.title}")
+    abstract fun printInfo()
+
+    override fun toString(): String {
+        return "Product Card: $naming  Brand: $brand  Price: $price Product type: ${productType.title}"
     }
 }

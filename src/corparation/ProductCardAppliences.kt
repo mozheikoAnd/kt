@@ -7,7 +7,10 @@ class ProductCardAppliences(
     price: Int
 ) : ProductCard(naming, brand, price, WhichProductCard.APPLIANCE) {
     override fun printInfo() {
-        super.printInfo()
-        println("  Power: $power")
+        println(this)
+    }
+
+    override fun toString(): String {
+        return "${super.toString()}  Power: $power"
     }
 }

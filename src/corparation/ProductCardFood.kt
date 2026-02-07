@@ -7,7 +7,10 @@ class ProductCardFood(
     price: Int
 ) : ProductCard(naming, brand, price, WhichProductCard.FOOD) {
     override fun printInfo() {
-        super.printInfo()
-        println("  KCalories: $kCalories")
+        println(this)
+    }
+
+    override fun toString(): String {
+        return "${super.toString()}  KCalories: $kCalories"
     }
 }

@@ -2,11 +2,20 @@ package corparation
 
 import kotlin.Int
 
-class Assistant (
+class Assistant(
     name: String,
     age: Int = 0,
     id: Int
-) : Employee(name, age, id) {
+) : Employee(name, age, id), Producer, Cleaner {
+
+    override fun clean() {
+        println("Assistant is cleaning.")
+    }
+
+    override fun byItems() {
+        println("Assistant buying items.")
+    }
+
     fun bingCoffee(count: Int = 1, typeCoffee: String = "Cappuccino"): String {
         repeat(count) {
             println("Stand up")
@@ -22,6 +31,7 @@ class Assistant (
     override fun working() {
         println("Employee $name is answer on call..")
     }
+
     override fun getInfo() {
         super.getInfo()
         println("Position: ${PositionJob.ASSISTANT.title}")

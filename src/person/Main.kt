@@ -8,5 +8,6 @@ fun main() {
 //    john.weight = 71.3
 
     john.info()
+    john.run()
     john.sayHello()
 }

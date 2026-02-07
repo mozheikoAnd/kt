@@ -1,18 +1,11 @@
 package person
 
-class Person {
-    val name: String
-    val age: Int
-    val height: Int
-    val weight: Double
-
-    constructor(name : String, age : Int, height : Int, weight : Double) {
-        this.name = name
-        this.age = age
-        this.height = height
-        this.weight = weight
-    }
-
+class Person(
+    private val name: String,
+    private val age: Int,
+    private val height: Int,
+    private val weight: Double
+){
     fun run(){
         repeat(10){
             println("$name is run $it")

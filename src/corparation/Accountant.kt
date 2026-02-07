@@ -6,7 +6,15 @@ class Accountant(
     name: String,
     age: Int,
     id: Int
-) : Employee(name, age, id) {
+) : Employee(name, age, id), Producer, Cleaner {
+
+    override fun clean() {
+        println("Accountant cleaning.")
+    }
+
+    override fun byItems() {
+        println("Accountant buying items.")
+    }
 
     val file = File("product_card.txt")
     val fileEmployee = File("workers.txt")
@@ -45,7 +53,7 @@ class Accountant(
     }
 
 
-    fun deleteCard() {
+    private fun deleteCard() {
         print("Enter name of card which you want to delete: ")
         val nameCard = readln()
         val cards = loadAllCards()
@@ -57,7 +65,7 @@ class Accountant(
         }
     }
 
-    fun saveProductCardToFile(card: ProductCard) {
+    private fun saveProductCardToFile(card: ProductCard) {
         file.appendText("${card.naming}%${card.brand}%${card.price}%")
         when (card) {
             is ProductCardFood -> {
@@ -74,7 +82,7 @@ class Accountant(
         }
     }
 
-    fun saveEmployeeToFile(employee: Employee) {
+    private fun saveEmployeeToFile(employee: Employee) {
 //        id: $id, name: $name, age: $age, Position: $position
         fileEmployee.appendText("${employee.id}%${employee.name}%${employee.age}%")
         fileEmployee.appendText(
@@ -125,7 +133,7 @@ class Accountant(
         return allCards
     }
 
-    fun addCard() {
+    private fun addCard() {
         print("Enter which card do you want to add. ")
         val whichProducts = WhichProductCard.entries
         for ((index, product) in whichProducts.withIndex()) {
@@ -164,14 +172,14 @@ class Accountant(
         saveProductCardToFile(card)
     }
 
-    fun showAllItems() {
+    private fun showAllItems() {
         val cards = loadAllCards()
         for (card in cards) {
             card.printInfo()
         }
     }
 
-    fun registerEmployee() {
+    private fun registerEmployee() {
         // выбрать позицию (добавить Enum)
         val positionsJob = PositionJob.entries
         print("Choose position: ")
@@ -235,14 +243,14 @@ class Accountant(
         return employeeAll
     }
 
-    fun showAllEmployees() {
+    private fun showAllEmployees() {
         val allEmployees = getEmployees()
         for (employee in allEmployees) {
             employee.getInfo()
         }
     }
 
-    fun fireEmployee() {
+    private fun fireEmployee() {
         print("Enter id employee which you want to fire: ")
         val id = readln().toInt()
         val employeeAll = getEmployees()
