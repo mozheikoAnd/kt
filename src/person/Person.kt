@@ -3,8 +3,16 @@ package person
 class Person(
     private val name: String,
     private val height: Int,
-    private val weight: Double
+    private val weight: Double,
+    var lastName: String
 ){
+    fun setLastName(lastName: String){
+        println("Congratulations on the wedding $lastName")
+        this.lastName = lastName
+    }
+
+    val fullName: String
+    get() = "$lastName $name"
     var age: Int = 0
     set(value) {
         if (value < field) {
