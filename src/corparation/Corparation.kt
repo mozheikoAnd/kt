@@ -13,11 +13,11 @@ fun main() {
 //    }
 
     val accountant = Accountant("Irina", 29, 1)
-//    accountant.working()
-    val workers = accountant.getEmployees()
-    for (worker in workers) {
-        if (worker is Producer) worker.byItems()
-        if (worker is Cleaner) worker.clean()
-        worker.working()
-    }
+    accountant.working()
+//    val workers = accountant.getEmployees()
+//    for (worker in workers) {
+//        if (worker is Producer) worker.byItems()
+//        if (worker is Cleaner) worker.clean()
+//        worker.working()
+//    }
 }

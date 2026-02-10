@@ -4,7 +4,7 @@ class Person(
     private val name: String,
     private val height: Int,
     private val weight: Double,
-    var lastName: String
+    private var lastName: String
 ){
     fun setLastName(lastName: String){
         println("Congratulations on the wedding $lastName")
