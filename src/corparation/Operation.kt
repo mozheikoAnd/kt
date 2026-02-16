@@ -7,5 +7,6 @@ enum class Operation(val title: String) {
     DELETE_CARD("Remove product card"),
     REGISTER_EMPLOYEE("Register new employee"),
     FIRE_EMPLOYEE("Fire an employee"),
-    SHOW_ALL_EMPLOYEE("Show all employees")
+    SHOW_ALL_EMPLOYEE("Show all employees"),
+    CHANGE_AGE("Change age employee")
 }

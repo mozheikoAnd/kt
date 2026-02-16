@@ -18,6 +18,9 @@ class Accountant(
         println("Accountant buying items.")
     }
 
+    override fun copy(age: Int): Accountant {
+        return Accountant(this.name, age, this.id)
+    }
 
     val fileEmployee = File("workers.txt")
 
@@ -53,6 +56,7 @@ class Accountant(
                 Operation.REGISTER_EMPLOYEE -> registerEmployee()
                 Operation.FIRE_EMPLOYEE -> fireEmployee()
                 Operation.SHOW_ALL_EMPLOYEE -> showAllEmployees()
+                Operation.CHANGE_AGE -> changeAge()
             }
         }
     }
@@ -165,7 +169,7 @@ class Accountant(
         saveEmployeeToFile(employee)
     }
 
-    fun getEmployees(): List<Employee> {
+    private fun getEmployees(): MutableList<Employee> {
         val employeeAll = mutableListOf<Employee>()
         if (fileEmployee.readText().isEmpty()) {
             return employeeAll
@@ -204,6 +208,19 @@ class Accountant(
         for (employee in employeeAll) {
             if (employee.id != id) {
                 saveEmployeeToFile(employee)
+            }
+        }
+    }
+
+    private fun changeAge(){
+        println("Enter id of employee: ")
+        val id = readln().toInt()
+        println("Enter a new age: ")
+        val age = readln().toInt()
+        val workers = getEmployees()
+        for ((index, worker) in workers.withIndex()) {
+            if (worker.id == id) {
+                val newWorker = worker.copy(age = age)
             }
         }
     }

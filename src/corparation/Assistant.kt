@@ -16,6 +16,10 @@ class Assistant(
         println("Assistant buying items.")
     }
 
+    override fun copy(age: Int): Assistant {
+        return Assistant(this.name, age, this.id)
+    }
+
     fun bingCoffee(count: Int = 1, typeCoffee: String = "Cappuccino"): String {
         repeat(count) {
             println("Stand up")
