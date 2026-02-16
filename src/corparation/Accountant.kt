@@ -43,7 +43,10 @@ class Accountant(
             }
             val operation = operations[operationIndex]
             when (operation) {
-                Operation.EXIT -> break
+                Operation.EXIT -> {
+                    productCardRepository.saveProductCards()
+                    break
+                }
                 Operation.ADD_CARD -> addCard()
                 Operation.SHOW_ALL_CARDS -> showAllItems()
                 Operation.DELETE_CARD -> deleteCard()
@@ -112,11 +115,11 @@ class Accountant(
                 ProductCardFood(calories, name, brand, price)
             }
         }
-        productCardRepository.saveProductCard(card)
+        productCardRepository.addProductCard(card)
     }
 
     private fun showAllItems() {
-        val cards = productCardRepository.loadAllCards()
+        val cards = productCardRepository.productCards
         for (card in cards) {
             card.printInfo()
         }

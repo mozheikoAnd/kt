@@ -5,20 +5,21 @@ import java.io.File
 class ProductCardRepository {
 
     private val fileProductCard = File("product_card.txt")
+    val productCards = loadAllCards()
 
     fun deleteCard(nameCard: String) {
-        val cards = loadAllCards()
-        fileProductCard.writeText("")
-        for (card in cards) {
-            if (card.naming != nameCard) {
-                saveProductCardToFile(card)
+        for (card in productCards) {
+            if (card.naming == nameCard) {
+                productCards.remove(card)
+                break
             }
         }
     }
 
-    fun loadAllCards(): MutableList<ProductCard> {
+    private fun loadAllCards(): MutableList<ProductCard> {
         val allCards = mutableListOf<ProductCard>()
         if (fileProductCard.readText().isEmpty()) {
+            println("List of product cards is empty")
             return allCards
         }
 
@@ -52,25 +53,31 @@ class ProductCardRepository {
         }
         return allCards
     }
-
-    fun saveProductCard(card: ProductCard) {
-        saveProductCardToFile(card)
+    fun addProductCard(productCard: ProductCard) {
+        productCards.add(productCard)
+    }
+    fun saveProductCards() {
+        saveProductCardToFile()
     }
 
-    private fun saveProductCardToFile(card: ProductCard) {
-        fileProductCard.appendText("${card.naming}%${card.brand}%${card.price}%")
-        when (card) {
-            is ProductCardFood -> {
-                fileProductCard.appendText("${card.kCalories}%${WhichProductCard.FOOD}\n")
-            }
+    private fun saveProductCardToFile() {
+        val content: StringBuilder = StringBuilder()
+        for (card in productCards) {
+            content.append("${card.naming}%${card.brand}%${card.price}%")
+            when (card) {
+                is ProductCardFood -> {
+                    content.append("${card.kCalories}%${WhichProductCard.FOOD}\n")
+                }
 
-            is ProductCardShoes -> {
-                fileProductCard.appendText("${card.size}%${WhichProductCard.SHOES}\n")
-            }
+                is ProductCardShoes -> {
+                    content.append("${card.size}%${WhichProductCard.SHOES}\n")
+                }
 
-            is ProductCardAppliences -> {
-                fileProductCard.appendText("${card.power}%${WhichProductCard.APPLIANCE}\n")
+                is ProductCardAppliences -> {
+                    content.append("${card.power}%${WhichProductCard.APPLIANCE}\n")
+                }
             }
         }
+        fileProductCard.writeText(content.toString())
     }
 }
