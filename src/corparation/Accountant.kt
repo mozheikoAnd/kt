@@ -8,7 +8,7 @@ class Accountant(
     id: Int
 ) : Employee(name, age, id), Producer, Cleaner {
 
-    val productCardRepository = ProductCardRepository()
+    val productCardRepository = ProductCardRepository
 
     override fun clean() {
         println("Accountant cleaning.")

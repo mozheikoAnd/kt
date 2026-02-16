@@ -2,15 +2,17 @@ package corparation
 
 import java.io.File
 
-class ProductCardRepository {
+object ProductCardRepository {
 
     private val fileProductCard = File("product_card.txt")
-    val productCards = loadAllCards()
+    private val _productCards = loadAllCards()
+    val productCards: List<ProductCard>
+        get() = _productCards.toList()
 
     fun deleteCard(nameCard: String) {
-        for (card in productCards) {
+        for (card in _productCards) {
             if (card.naming == nameCard) {
-                productCards.remove(card)
+                _productCards.remove(card)
                 break
             }
         }
@@ -54,7 +56,7 @@ class ProductCardRepository {
         return allCards
     }
     fun addProductCard(productCard: ProductCard) {
-        productCards.add(productCard)
+        _productCards.add(productCard)
     }
     fun saveProductCards() {
         saveProductCardToFile()
@@ -62,7 +64,7 @@ class ProductCardRepository {
 
     private fun saveProductCardToFile() {
         val content: StringBuilder = StringBuilder()
-        for (card in productCards) {
+        for (card in _productCards) {
             content.append("${card.naming}%${card.brand}%${card.price}%")
             when (card) {
                 is ProductCardFood -> {
