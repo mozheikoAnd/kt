@@ -10,4 +10,14 @@ abstract class Employee(
     open fun getInfo(){
         print("ID: $id  Name: $name  Age: $age  ")
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is Employee) return false
+        if (
+            this.name == other.name &&
+            this.age == other.age &&
+            this.id == other.id
+        ) return true
+        return false
+    }
 }
