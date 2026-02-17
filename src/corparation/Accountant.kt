@@ -1,7 +1,5 @@
 package corparation
 
-import java.io.File
-
 class Accountant(
     name: String,
     age: Int,
@@ -9,6 +7,7 @@ class Accountant(
 ) : Employee(name, age, id), Producer, Cleaner {
 
     val productCardRepository = ProductCardRepository
+    val employeeRepository = EmployeeRepository
 
     override fun clean() {
         println("Accountant cleaning.")
@@ -21,8 +20,6 @@ class Accountant(
     override fun copy(age: Int): Accountant {
         return Accountant(this.name, age, this.id)
     }
-
-    val fileEmployee = File("workers.txt")
 
     override fun getInfo() {
         super.getInfo()
@@ -48,8 +45,10 @@ class Accountant(
             when (operation) {
                 Operation.EXIT -> {
                     productCardRepository.saveProductCards()
+                    employeeRepository.saveEmployee()
                     break
                 }
+
                 Operation.ADD_CARD -> addCard()
                 Operation.SHOW_ALL_CARDS -> showAllItems()
                 Operation.DELETE_CARD -> deleteCard()
@@ -67,21 +66,6 @@ class Accountant(
         val nameCard = readln()
         productCardRepository.deleteCard(nameCard)
     }
-
-    private fun saveEmployeeToFile(employee: Employee) {
-//        id: $id, name: $name, age: $age, Position: $position
-        fileEmployee.appendText("${employee.id}%${employee.name}%${employee.age}%")
-        fileEmployee.appendText(
-            when (employee) {
-                is Accountant -> ("${PositionJob.ACCOUNTANT}\n")
-                is Assistant -> ("${PositionJob.ASSISTANT}\n")
-                is Consultant -> ("${PositionJob.CONSULTANT}\n")
-                is Director -> ("${PositionJob.DIRECTOR}\n")
-                else -> ""
-            }
-        )
-    }
-
 
     private fun addCard() {
         print("Enter which card do you want to add. ")
@@ -166,35 +150,11 @@ class Accountant(
                 Consultant(name, age, id)
             }
         }
-        saveEmployeeToFile(employee)
-    }
-
-    private fun getEmployees(): MutableList<Employee> {
-        val employeeAll = mutableListOf<Employee>()
-        if (fileEmployee.readText().isEmpty()) {
-            return employeeAll
-        }
-
-        val employeesStr = fileEmployee.readText().trim().split("\n")
-        for ((index, employeeStr) in employeesStr.withIndex()) {
-            val employeeSplit = employeeStr.split("%")
-            val id = employeeSplit[0].toInt()
-            val name = employeeSplit[1]
-            val age = employeeSplit[2].toInt()
-            val position = employeeSplit[3]
-            val employee = when (PositionJob.valueOf(position)) {
-                PositionJob.DIRECTOR -> Director(name, age, id)
-                PositionJob.ACCOUNTANT -> Accountant(name, age, id)
-                PositionJob.ASSISTANT -> Assistant(name, age, id)
-                PositionJob.CONSULTANT -> Consultant(name, age, id)
-            }
-            employeeAll.add(employee)
-        }
-        return employeeAll
+        employeeRepository.registerEmployee(employee)
     }
 
     private fun showAllEmployees() {
-        val allEmployees = getEmployees()
+        val allEmployees = employeeRepository.allEmployees
         for (employee in allEmployees) {
             employee.getInfo()
         }
@@ -203,25 +163,14 @@ class Accountant(
     private fun fireEmployee() {
         print("Enter id employee which you want to fire: ")
         val id = readln().toInt()
-        val employeeAll = getEmployees()
-        fileEmployee.writeText("")
-        for (employee in employeeAll) {
-            if (employee.id != id) {
-                saveEmployeeToFile(employee)
-            }
-        }
+        employeeRepository.fireEmployee(id)
     }
 
-    private fun changeAge(){
+    private fun changeAge() {
         println("Enter id of employee: ")
         val id = readln().toInt()
         println("Enter a new age: ")
         val age = readln().toInt()
-        val workers = getEmployees()
-        for ((index, worker) in workers.withIndex()) {
-            if (worker.id == id) {
-                val newWorker = worker.copy(age = age)
-            }
-        }
+        employeeRepository.changeAge(id, age)
     }
 }
