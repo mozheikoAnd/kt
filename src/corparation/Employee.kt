@@ -7,7 +7,7 @@ abstract class Employee(
 ) {
     abstract fun working()
     abstract fun copy(age: Int = this.age): Employee
-    open fun getInfo(){
+    open fun getInfo() {
         print("ID: $id  Name: $name  Age: $age  ")
     }
 

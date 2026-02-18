@@ -34,8 +34,8 @@ object EmployeeRepository {
         return employeeAll
     }
 
-    fun registerEmployee(employee: Employee){
-        for(worker in _allEmployees){
+    fun registerEmployee(employee: Employee) {
+        for (worker in _allEmployees) {
             if (worker == employee) return
         }
         _allEmployees.add(employee)

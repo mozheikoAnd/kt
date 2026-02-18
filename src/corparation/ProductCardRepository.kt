@@ -18,8 +18,8 @@ object ProductCardRepository {
         }
     }
 
-    private fun loadAllCards(): MutableList<ProductCard> {
-        val allCards = mutableListOf<ProductCard>()
+    private fun loadAllCards(): MutableSet<ProductCard> {
+        val allCards = mutableSetOf<ProductCard>()
         if (fileProductCard.readText().isEmpty()) {
             println("List of product cards is empty")
             return allCards
@@ -55,9 +55,11 @@ object ProductCardRepository {
         }
         return allCards
     }
+
     fun addProductCard(productCard: ProductCard) {
         _productCards.add(productCard)
     }
+
     fun saveProductCards() {
         saveProductCardToFile()
     }
