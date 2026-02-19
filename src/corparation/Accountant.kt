@@ -173,4 +173,8 @@ class Accountant(
         val age = readln().toInt()
         employeeRepository.changeAge(id, age)
     }
+
+    override fun toString(): String {
+        return super.toString()
+    }
 }

@@ -22,7 +22,6 @@ object EmployeeRepository {
             val name = employeeSplit[1]
             val age = employeeSplit[2].toInt()
             val position = employeeSplit[employeeSplit.lastIndex]
-            println (position)
             val employee = when (PositionJob.valueOf(position)) {
                 PositionJob.DIRECTOR -> Director(name, age, id)
                 PositionJob.ACCOUNTANT -> Accountant(name, age, id)
@@ -41,7 +40,7 @@ object EmployeeRepository {
         _allEmployees.add(employee)
     }
 
-    fun saveEmployee(){
+    fun saveEmployee() {
         saveEmployeeToFile()
     }
 
@@ -49,7 +48,8 @@ object EmployeeRepository {
         val content = StringBuilder()
         for (employee in _allEmployees) {
             content.append("${employee.id}%${employee.name}%${employee.age}%")
-            content.append(when (employee) {
+            content.append(
+                when (employee) {
                     is Accountant -> ("${PositionJob.ACCOUNTANT}\n")
                     is Assistant -> ("${PositionJob.ASSISTANT}\n")
                     is Consultant -> ("${PositionJob.CONSULTANT}\n")
@@ -77,5 +77,19 @@ object EmployeeRepository {
                 _allEmployees[index] = newWorker
             }
         }
+    }
+
+    fun findDirector(): Director? {
+        for (employee in _allEmployees) {
+            if (employee is Director) return employee
+        }
+        return null
+    }
+
+    fun findAssistant(): Assistant? {
+        for (employee in _allEmployees) {
+            if (employee is Assistant) return employee
+        }
+        return null
     }
 }
